@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>by <a href="/u/{{ post.author }}">u/{{ post.author }}</a> • {{ post.score }} points</p>
+
+    {% if image %}
+        <img src="{{ image }}" style="max-width: 800px; display: block; margin-bottom: 15px;">
+    {% endif %}
+
+    <hr>
+
+    <h2>Comments</h2>
+
+    {% macro render_comments(comments, depth=0) %}
+        {% for c in comments %}
+            <div style="margin-left: {{ depth * 20 }}px; border-left: 1px solid #ccc; padding-left: 10px;">
+                <strong><a href="/u/{{ c.author }}">u/{{ c.author }}</a></strong>
+                <p>{{ c.body }}</p>
+                {{ render_comments(c.replies, depth + 1) }}
+            </div>
+        {% endfor %}
+    {% endmacro %}
+
+    {{ render_comments(comments) }}
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reddit Archive</title>
+</head>
+<body>
+    <h1>All glory to israel</h1>
+    <form action="/r/" method="get" onsubmit="location.href='/r/' + this.sub.value; return false;">
+        <input name="sub" placeholder="subreddit name">
+        <button type="submit">Go</button>
+    </form>
+<form onsubmit="location.href='/r/' + this.sub.value; return false;">
+    <input name="sub" placeholder="subreddit">
+    <button>Go to subreddit</button>
+</form>
+
+<br>
+
+<form onsubmit="location.href='/u/' + this.user.value; return false;">
+    <input name="user" placeholder="username">
+    <button>Go to user</button>
+</form>
+
+</body>
+</html>

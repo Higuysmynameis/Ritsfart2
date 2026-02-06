@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>u/{{ user.name }}</title>
+</head>
+<body>
+    <h1>u/{{ user.name }}</h1>
+    <p>
+        Karma: {{ user.total_karma }} •
+        Created: {{ user.created_utc }}
+    </p>
+
+    <hr>
+
+    <h2>Recent Posts</h2>
+    {% for p in posts %}
+        <div>
+            <a href="/post/{{ p.id }}">{{ p.title }}</a>
+            <small>r/{{ p.subreddit }} • {{ p.score }} points</small>
+        </div>
+    {% endfor %}
+
+    <hr>
+
+    <h2>Recent Comments</h2>
+    {% for c in comments %}
+        <div>
+            <small>r/{{ c.subreddit }} • {{ c.score }} points</small>
+            <p>{{ c.body }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

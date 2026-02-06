@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>r/{{ subreddit }}</title>
+</head>
+<body>
+    <h1>r/{{ subreddit }}</h1>
+
+    <div id="posts">
+        {% for post in posts %}
+            <div class="post" style="margin-bottom: 20px;">
+                <a href="/post/{{ post.id }}">
+                    <h3>{{ post.title }}</h3>
+                </a>
+
+                {% if post.image %}
+                    <img src="{{ post.image }}" style="max-width: 600px; display: block;">
+                {% endif %}
+
+                <p>
+                    {{ post.score }} points •
+                    {{ post.comments }} comments •
+                    by <a href="/u/{{ post.author }}">u/{{ post.author }}</a>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="loading" style="display:none;">Loading more posts...</div>
+
+    <script>
+        let after = "{{ after }}";
+        let loading = false;
+
+        async function loadMore() {
+            if (loading || !after) return;
+            loading = true;
+            document.getElementById("loading").style.display = "block";
+
+            const res = await fetch(`/r/{{ subreddit }}?after=${after}`);
+            const html = await res.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            const newPosts = doc.querySelectorAll(".post");
+            const newAfter = doc.body.innerHTML.match(/let after = "([^"]*)"/);
+
+            newPosts.forEach(p => {
+                document.getElementById("posts").appendChild(p);
+            });
+
+            after = newAfter ? newAfter[1] : null;
+            loading = false;
+            document.getElementById("loading").style.display = "none";
+        }
+
+        window.addEventListener("scroll", () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+                loadMore();
+            }
+        });
+    </script>
+</body>
+</html>
